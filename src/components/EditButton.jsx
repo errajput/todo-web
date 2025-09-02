@@ -1,0 +1,16 @@
+"use client";
+
+import { PencilIcon } from "@heroicons/react/24/outline";
+
+export default function EditButton({ onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="bg-blue-50 text-blue-900 border border-blue-200 hover:bg-blue-200 
+      px-2 py-1 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-center"
+      aria-label="Edit todo"
+    >
+      <PencilIcon className="h-5 w-5" />
+    </button>
+  );
+}
