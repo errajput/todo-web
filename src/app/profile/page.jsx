@@ -11,6 +11,7 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
+
       if (!token) {
         router.push("/login"); // redirect if not logged in
         return;
@@ -19,6 +20,7 @@ export default function ProfilePage() {
       try {
         const res = await fetch("http://localhost:5000/user/profile", {
           headers: {
+            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
         });
@@ -30,7 +32,7 @@ export default function ProfilePage() {
         }
 
         const data = await res.json();
-        setUser(data);
+        setUser(data.data.user);
       } catch (err) {
         console.error("Error fetching user:", err);
       } finally {
