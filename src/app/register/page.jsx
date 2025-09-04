@@ -8,7 +8,6 @@ export default function RegisterPage() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   const [message, setMessage] = useState("");
