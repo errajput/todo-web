@@ -14,7 +14,9 @@ export default function Home() {
   useEffect(() => {
     fetch("http://localhost:5000/todos")
       .then((res) => res.json())
-      .then(setTodos);
+      .then((data) => {
+        setTodos(data.todos || []);
+      });
   }, []);
 
   //NOTE:  Add Todo
