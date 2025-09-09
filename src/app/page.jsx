@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import InputContainer from "@/components/InputContainer.jsx";
 import TodoItem from "@/components/TodoItem.jsx";
 import ShowCompletedTodo from "@/components/ShowCompletedTodo.jsx";
+import { addTodo, getTodos } from "@/services/todos.api";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -11,17 +12,42 @@ export default function Home() {
   const [editingId, setEditingId] = useState(null);
   const [showCompletedTodo, setShowCompletedTodo] = useState(true);
 
+  const fetchTodos = async () => {
+    try {
+      // const token = localStorage.getItem("token");
+
+      // const res = await fetch("http://localhost:5000/todos", {
+      //   headers: {
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+
+      // if (!res.ok) {
+      //   throw new Error(`Error ${res.status}: ${res.statusText}`);
+      // }
+
+      // const data = await res.json();
+      // console.log("TODOS", data);
+      const todos = await getTodos();
+
+      setTodos(todos || []);
+    } catch (err) {
+      console.error("Error fetching todos:", err);
+    }
+  };
   useEffect(() => {
-    fetch("http://localhost:5000/todos")
-      .then((res) => res.json())
-      .then((data) => {
-        setTodos(data.todos || []);
-      });
+    fetchTodos();
   }, []);
 
   //NOTE:  Add Todo
   const handleAdd = async () => {
     if (inputValue.trim() === "") return;
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("You must be logged in to add todos.");
+      return;
+    }
 
     if (editingId) {
       //NOTE: Update todo
@@ -38,15 +64,20 @@ export default function Home() {
       setEditingId(null);
       setInputValue("");
     } else {
+      await addTodo(inputValue);
       //NOTE: Add new TODO
-      const res = await fetch("http://localhost:5000/todos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: inputValue }),
-      });
-      const newTodo = await res.json();
+      // const res = await fetch("http://localhost:5000/todos", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: JSON.stringify({ title: inputValue }),
+      // });
+      // const newTodo = await res.json();
 
-      setTodos([newTodo, ...todos]);
+      // setTodos([newTodo, ...todos]);
+      fetchTodos();
       setInputValue("");
     }
   };
