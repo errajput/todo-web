@@ -1,7 +1,10 @@
 import "./globals.css";
 export const metadata = {
   title: "Todo App",
-  description: "A simple todo app with Next.js",
+  description: "Add Your Todo Here",
+  icons: {
+    icon: "/file.svg",
+  },
 };
 
 export default function RootLayout({ children }) {
