@@ -53,14 +53,17 @@ export default function Home() {
       //NOTE: Update todo
       const res = await fetch(`http://localhost:5000/todos/${editingId}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ title: inputValue }),
       });
       const data = await res.json();
-
-      setTodos((prev) =>
-        prev.map((t) => (t._id === editingId ? data.updatedTodo : t))
-      );
+      fetchTodos();
+      // setTodos((prev) =>
+      //   prev.map((t) => (t._id === editingId ? data.updatedTodo : t))
+      // );
       setEditingId(null);
       setInputValue("");
     } else {
@@ -84,26 +87,33 @@ export default function Home() {
 
   // Toggle complete
   const markDone = (id, currentStatus) => {
+    const token = localStorage.getItem("token");
+
     fetch(`http://localhost:5000/todos/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify({ isDone: !currentStatus }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("data:", data);
+        // console.log("data:", data);
+        fetchTodos();
+        // const updatedOne = todos.map((item) =>
+        //   item._id === id ? data.updatedTodo : item
+        // );
+        // console.log("Update check", updatedOne);
 
-        const updatedOne = todos.map((item) =>
-          item._id === id ? data.updatedTodo : item
-        );
-        console.log("Update check", updatedOne);
-
-        setTodos(updatedOne);
+        // setTodos(updatedOne);
       });
   };
 
   // Delete
   const handleDelete = async (id) => {
+    const token = localStorage.getItem("token");
+
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this todo?"
     );
@@ -112,6 +122,10 @@ export default function Home() {
     try {
       await fetch(`http://localhost:5000/todos/${id}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       setTodos(todos.filter((todo) => todo._id !== id));
     } catch (err) {
@@ -171,7 +185,7 @@ export default function Home() {
         {/* Active Todos */}
         <div>
           {todos
-            .filter((t) => !t.isDone)
+            .filter((t) => t && !t.isDone)
             .map((v) => (
               <TodoItem
                 key={v._id || v.id}
@@ -195,7 +209,7 @@ export default function Home() {
             </div>
             {showCompletedTodo &&
               todos
-                .filter((t) => t.isDone)
+                .filter((t) => t && t.isDone)
                 .map((todo) => (
                   <TodoItem
                     key={todo._id}
