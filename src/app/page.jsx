@@ -149,26 +149,9 @@ export default function Home() {
 
   return (
     <div>
-      <div className="flex flex-col items-center justify-center bg-gray-50 p-6">
-        <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
-          Add your Todos here
-        </h1>
-
-        <nav className="flex gap-4">
-          <Link
-            href="/register"
-            className="px-6 py-3 bg-blue-600 text-white rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-200"
-          >
-            Register
-          </Link>
-          <Link
-            href="/login"
-            className="px-6 py-3 bg-green-600 text-white rounded-xl shadow-md hover:bg-green-700 hover:shadow-lg transition-all duration-200"
-          >
-            Login
-          </Link>
-        </nav>
-      </div>
+      <h1 className="text-3xl font-extrabold text-gray-800 m-6 text-center">
+        Add your Todos here
+      </h1>
 
       <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-blue-100">
         <h1 className="text-2xl font-bold text-center text-blue-900 mb-4">
