@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import InputContainer from "@/components/InputContainer.jsx";
 import TodoItem from "@/components/TodoItem.jsx";
 import ShowCompletedTodo from "@/components/ShowCompletedTodo.jsx";
-import { addTodo, getTodos } from "@/services/todos.api";
+import {
+  addTodo,
+  deleteTodo,
+  getTodos,
+  updateTodo,
+} from "@/services/todos.api";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -12,122 +17,52 @@ export default function Home() {
   const [editingId, setEditingId] = useState(null);
   const [showCompletedTodo, setShowCompletedTodo] = useState(true);
 
+  useEffect(() => {
+    fetchTodos();
+  }, []);
   const fetchTodos = async () => {
     try {
-      // const token = localStorage.getItem("token");
-
-      // const res = await fetch("http://localhost:5000/todos", {
-      //   headers: {
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      // });
-
-      // if (!res.ok) {
-      //   throw new Error(`Error ${res.status}: ${res.statusText}`);
-      // }
-
-      // const data = await res.json();
-      // console.log("TODOS", data);
       const todos = await getTodos();
-
       setTodos(todos || []);
     } catch (err) {
       console.error("Error fetching todos:", err);
     }
   };
-  useEffect(() => {
-    fetchTodos();
-  }, []);
 
-  //NOTE:  Add Todo
+  // Add / Edit
   const handleAdd = async () => {
-    if (inputValue.trim() === "") return;
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      alert("You must be logged in to add todos.");
-      return;
-    }
-
-    if (editingId) {
-      //NOTE: Update todo
-      const res = await fetch(`http://localhost:5000/todos/${editingId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ title: inputValue }),
-      });
-      const data = await res.json();
-      fetchTodos();
-      // setTodos((prev) =>
-      //   prev.map((t) => (t._id === editingId ? data.updatedTodo : t))
-      // );
-      setEditingId(null);
+    if (!inputValue.trim()) return;
+    try {
+      if (editingId) {
+        await updateTodo(editingId, { title: inputValue });
+        setEditingId(null);
+      } else {
+        await addTodo(inputValue);
+      }
       setInputValue("");
-    } else {
-      await addTodo(inputValue);
-      //NOTE: Add new TODO
-      // const res = await fetch("http://localhost:5000/todos", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: JSON.stringify({ title: inputValue }),
-      // });
-      // const newTodo = await res.json();
-
-      // setTodos([newTodo, ...todos]);
       fetchTodos();
-      setInputValue("");
+    } catch (err) {
+      console.error("Error adding/updating todo:", err);
     }
   };
 
-  // Toggle complete
-  const markDone = (id, currentStatus) => {
-    const token = localStorage.getItem("token");
-
-    fetch(`http://localhost:5000/todos/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ isDone: !currentStatus }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log("data:", data);
-        fetchTodos();
-        // const updatedOne = todos.map((item) =>
-        //   item._id === id ? data.updatedTodo : item
-        // );
-        // console.log("Update check", updatedOne);
-
-        // setTodos(updatedOne);
-      });
+  // Toggle done
+  const markDone = async (id, currentStatus) => {
+    try {
+      await updateTodo(id, { isDone: !currentStatus });
+      fetchTodos();
+    } catch (err) {
+      console.error("Error updating todo:", err);
+    }
   };
 
   // Delete
   const handleDelete = async (id) => {
-    const token = localStorage.getItem("token");
-
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this todo?"
-    );
+    const confirmDelete = window.confirm("Are you sure?");
     if (!confirmDelete) return;
-
     try {
-      await fetch(`http://localhost:5000/todos/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setTodos(todos.filter((todo) => todo._id !== id));
+      await deleteTodo(id);
+      setTodos((prev) => prev.filter((t) => t._id !== id));
     } catch (err) {
       console.error("Error deleting todo:", err);
     }
