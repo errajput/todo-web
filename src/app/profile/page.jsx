@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -43,29 +45,55 @@ export default function ProfilePage() {
     fetchUser();
   }, [router]);
 
-  if (loading) return <p className="p-4">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="">
+        <p className="text-lg font-semibold text-blue-700">
+          Loading profile...
+        </p>
+      </div>
+    );
+  }
 
-  if (!user) return <p className="p-4">No user found</p>;
+  if (!user) {
+    return (
+      <div>
+        <p className="text-lg font-semibold text-red-600">No user found</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow rounded-lg mt-6">
-      <h1 className="text-2xl font-bold mb-4">Profile</h1>
-      <p>
-        <strong>Name:</strong> {user.name}
-      </p>
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
+    <div className="h-100 flex items-center justify-center m-12">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 text-center">
+        <h1 className="text-3xl font-extrabold text-green-700 mb-6">
+          Profile 👤
+        </h1>
 
-      <button
-        className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg"
-        onClick={() => {
-          localStorage.removeItem("token");
-          router.push("/login");
-        }}
-      >
-        Logout
-      </button>
+        <div className="space-y-3 text-gray-700">
+          <p>
+            <span className="font-semibold">Name:</span> {user.name}
+          </p>
+          <p>
+            <span className="font-semibold">Email:</span> {user.email}
+          </p>
+        </div>
+        <Link
+          href="/"
+          className="block w-full bg-blue-700 text-white font-semibold p-2 rounded-lg hover:bg-blue-800 transition mt-6"
+        >
+          Add Your Todo
+        </Link>
+        <button
+          className="mt-4 px-4 py-2 bg-gray-500 text-white hover:text-gray-200 rounded-lg cursor-pointer"
+          onClick={() => {
+            localStorage.removeItem("token");
+            router.push("/login");
+          }}
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

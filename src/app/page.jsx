@@ -149,7 +149,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="text-3xl font-extrabold text-gray-800 m-6 text-center">
+      <h1 className="text-3xl font-extrabold text-blue-800 m-6 text-center">
         Add your Todos here
       </h1>
 

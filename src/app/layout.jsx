@@ -6,7 +6,7 @@ export const metadata = {
   description:
     "A simple and intuitive Todo App to organize, track, and manage your tasks efficiently, helping you stay productive every day.",
   icons: {
-    icon: "/todoIcon.webp",
+    icon: "/todoIcon.png",
   },
 };
 
@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
       <body>
         <div className="min-h-screen flex flex-col">
           <Header />
-          <div className="min-h-screen flex flex-col">
+          <div className="flex-grow bg-gradient-to-br from-white to-blue-200">
             <main>{children}</main>
           </div>
         </div>
