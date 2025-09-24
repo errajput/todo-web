@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import PasswordField from "@/ui/PasswordField";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -73,18 +74,7 @@ export default function RegisterPage() {
             className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
             required
           />
-          <label className="block text-sm font-medium text-blue-800 mb-1">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-            required
-          />
+          <PasswordField value={formData.password} onChange={handleChange} />
 
           <button
             type="submit"

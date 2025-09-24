@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { loginUser } from "@/services/user.service";
+import PasswordField from "@/ui/PasswordField";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -19,27 +21,20 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!formData.email || !formData.password) {
+      setMessage("Please fill all fields.");
+      return;
+    }
     try {
-      const res = await fetch("http://localhost:5000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const data = await loginUser(formData);
 
-      const data = await res.json();
-
-      if (res.ok && data?.data?.token) {
+      if (data?.data?.token) {
         setMessage("Login successful ✅");
 
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
 
         router.push("/profile");
-      } else {
-        setMessage(data.message || "Invalid credentials ❌");
       }
     } catch (err) {
       setMessage("Something went wrong 🚨");
@@ -67,20 +62,8 @@ export default function LoginPage() {
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-blue-800 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-blue-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none"
-              required
-            />
-          </div>
+          <PasswordField value={formData.password} onChange={handleChange} />
+
           <button
             type="submit"
             className="w-full bg-blue-300 text-blue-700 font-semibold py-2.5 rounded-lg shadow-md hover:bg-blue-800 hover:text-white transition duration-200 cursor-pointer"
