@@ -91,7 +91,7 @@ export default function LoginPage() {
         {message && (
           <p
             className={`mt-4 text-center text-sm font-medium ${
-              message.includes("successful") ? "text-green-600" : "text-red-600"
+              message.includes("successful") ? "text-blue-600" : "text-red-600"
             }`}
           >
             {message}
