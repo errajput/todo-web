@@ -7,13 +7,13 @@ import { Squares2X2Icon } from "@heroicons/react/24/outline";
 
 const TodoItem = ({ v, markDone, handleDelete, handleEdit }) => {
   return (
-    <div key={v.id} className="p-2 m-2 rounded-md">
+    <div key={v.id} className="p-2 m-2 rounded-md text-purple-700">
       <div className="flex items-center gap-4">
-        <Squares2X2Icon className="h-3 w-3 text-blue-800 cursor-move" />
+        <Squares2X2Icon className="h-3 w-3 text-purple-700 cursor-move" />
         <CustomCheckBox checked={v.isDone} onChange={() => markDone(v._id)} />
         <p
           className={`flex-1 text-left ${
-            v.isDone ? "line-through text-blue-300" : ""
+            v.isDone ? "line-through text-purple-300" : ""
           }`}
         >
           {v.title}

@@ -73,7 +73,7 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="absolute top-16 right-0 w-50 bg-blue-300/50 text-blue-800 flex flex-col items-center space-y-4 py-4 shadow-md md:hidden">
+        <div className="absolute top-16 right-0 w-50 bg-purple-300/50 text-purple-800 flex flex-col items-center space-y-4 py-4 shadow-md md:hidden">
           {isLoggedIn ? (
             <Link
               href="/profile"
@@ -86,14 +86,14 @@ export default function Header() {
             <>
               <Link
                 href="/register"
-                className="nav-link cursor-pointer hover:text-blue-400"
+                className="nav-link cursor-pointer hover:text-purple-400"
                 onClick={() => setMenuOpen(false)}
               >
                 Register
               </Link>
               <Link
                 href="/login"
-                className="nav-link cursor-pointer hover:text-blue-400"
+                className="nav-link cursor-pointer hover:text-purple-400"
                 onClick={() => setMenuOpen(false)}
               >
                 Login

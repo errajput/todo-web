@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+
 import { useEffect, useState } from "react";
 import InputContainer from "@/components/InputContainer.jsx";
 import TodoItem from "@/components/TodoItem.jsx";
@@ -84,12 +84,12 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="text-3xl font-extrabold text-blue-800 m-6 text-center">
+      <h1 className="text-3xl font-extrabold text-purple-700 m-6 text-center">
         Add your Todos here
       </h1>
 
-      <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-blue-100">
-        <h1 className="text-2xl font-bold text-center text-blue-900 mb-4">
+      <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-purple-200">
+        <h1 className="text-2xl font-bold text-center text-purple-800 mb-4">
           Todo App
         </h1>
 
@@ -119,7 +119,7 @@ export default function Home() {
         {todos.some((t) => t.isDone) && (
           <div>
             <div className="flex items-center justify-between">
-              <h2 className="text-blue-900 font-semibold ml-4">Completed</h2>
+              <h2 className="text-purple-800 font-semibold ml-4">Completed</h2>
               <ShowCompletedTodo
                 setShowCompletedTodo={setShowCompletedTodo}
                 showCompletedTodo={showCompletedTodo}

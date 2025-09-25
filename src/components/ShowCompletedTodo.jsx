@@ -4,7 +4,7 @@ const ShowCompletedTodo = ({ setShowCompletedTodo, showCompletedTodo }) => {
   return (
     <button
       onClick={() => setShowCompletedTodo(!showCompletedTodo)}
-      className=" mb-3 m-4 text-blue-800 px-2 transition cursor-pointer"
+      className=" mb-3 m-4 text-purple-700 px-2 transition cursor-pointer"
     >
       <ChevronDownIcon
         className={`h-3 w-3 transform transition-transform duration-1000 ${
