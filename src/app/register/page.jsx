@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PasswordField from "@/ui/PasswordField";
+import Button from "@/ui/Button";
+import TextField from "@/ui/TextField";
+import EmailField from "@/ui/EmailField";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -43,65 +47,54 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center pt-12">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 border border-blue-100">
-        <h1 className="text-3xl font-extrabold text-center text-blue-700 mb-6">
-          Create Account ✨
+    <div className="flex items-center justify-center mt-12">
+      <div className="relative w-full max-w-md bg-white/70 backdrop-blur-md border border-white/30 rounded-3xl shadow-2xl p-10 animate-fadeIn">
+        {/* Header */}
+        <h1 className="text-4xl font-extrabold text-center text-purple-700 mb-8 tracking-wide">
+          Join the Magic ✨
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          <label className="block text-sm font-medium text-blue-800 mb-1">
-            Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-            required
-          />
-          <label className="block text-sm font-medium text-blue-800 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2.5 border border-blue-200 rounded-lg focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none transition"
-            required
-          />
+          <div className="relative">
+            <TextField
+              label={"Name"}
+              value={formData.name}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Email */}
+          <div className="relative">
+            <EmailField value={formData.email} onChange={handleChange} />
+          </div>
+
           <PasswordField value={formData.password} onChange={handleChange} />
 
-          <button
-            type="submit"
-            className="w-full bg-blue-200 text-blue-700 font-semibold py-2.5 rounded-lg shadow-md hover:bg-blue-800 hover:text-white hover:shadow-lg transition duration-200 cursor-pointer"
-          >
-            Register
-          </button>
+          <Button label={"Create Account"} className={"w-full"} />
         </form>
 
+        {/* Message */}
         {message && (
           <p
-            className={`mt-4 text-center text-sm font-medium ${
-              message.includes("success") ? "text-green-600" : "text-red-600"
+            className={`mt-5 text-center text-sm font-medium ${
+              message.toLowerCase().includes("success")
+                ? "text-purple-600"
+                : "text-red-500"
             }`}
           >
             {message}
           </p>
         )}
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        {/* Login Link */}
+        <p className="mt-8 text-center text-gray-700 text-sm">
           Already have an account?{" "}
-          <a
+          <Link
             href="/login"
-            className="text-blue-700 font-medium hover:underline"
+            className="text-purple-600 font-semibold hover:underline"
           >
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

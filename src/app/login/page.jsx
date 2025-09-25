@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginUser } from "@/services/user.service";
 import PasswordField from "@/ui/PasswordField";
+import EmailField from "@/ui/EmailField";
+import Button from "@/ui/Button";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -42,47 +44,51 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center pt-10">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <h1 className="text-3xl font-bold text-center text-blue-800 mb-6">
+    <div className="flex items-center justify-center mt-12">
+      <div className="w-full max-w-md bg-white/70 backdrop-blur-md border border-white/30 rounded-3xl shadow-2xl p-10">
+        {/* Header */}
+        <h1 className="text-4xl font-extrabold text-center text-purple-700 mb-8 tracking-wide">
           Welcome Back 👋
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-blue-800 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="relative">
+            <EmailField
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-blue-300 rounded-lg focus:ring-1 focus:ring-blue-400 focus:outline-none"
-              required
+              className="w-full"
             />
           </div>
-          <PasswordField value={formData.password} onChange={handleChange} />
 
-          <button
-            type="submit"
-            className="w-full bg-blue-300 text-blue-700 font-semibold py-2.5 rounded-lg shadow-md hover:bg-blue-800 hover:text-white transition duration-200 cursor-pointer"
-          >
-            Login
-          </button>
+          <PasswordField
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full"
+          />
+          <Button label={"Login"} className={"w-full"} />
         </form>
+
+        {/* Message */}
         {message && (
           <p
-            className={`mt-4 text-center text-sm font-medium ${
-              message.includes("successful") ? "text-blue-600" : "text-red-600"
+            className={`mt-5 text-center text-sm font-medium ${
+              message.toLowerCase().includes("successful")
+                ? "text-purple-600"
+                : "text-red-500"
             }`}
           >
             {message}
           </p>
         )}
-        <p className="mt-6 text-center text-sm text-gray-600">
+
+        {/* Register Link */}
+        <p className="mt-8 text-center text-gray-700 text-sm">
           Don't have an account?{" "}
-          <Link href="/register" className="text-blue-600 hover:underline">
+          <Link
+            href="/register"
+            className="text-purple-700 font-semibold hover:underline"
+          >
             Register
           </Link>
         </p>

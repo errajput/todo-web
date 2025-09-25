@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Button from "@/ui/Button";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -78,7 +79,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div>
-        <p className="text-lg font-semibold text-blue-700">
+        <p className="text-lg font-semibold text-purple-700">
           Loading profile...
         </p>
       </div>
@@ -96,7 +97,7 @@ export default function ProfilePage() {
   return (
     <div className="h-100 flex items-center justify-center m-12">
       <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 text-center">
-        <h1 className="text-3xl font-extrabold text-blue-800 mb-6">
+        <h1 className="text-3xl font-extrabold text-purple-700 mb-6">
           Profile 👤
         </h1>
 
@@ -121,47 +122,44 @@ export default function ProfilePage() {
 
         {isEditing ? (
           <div className="mt-4 flex gap-3 justify-center">
-            <button
+            <Button
+              label={"Save"}
               onClick={handleUpdateName}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              Save
-            </button>
-            <button
+              className={"w-full"}
+            />
+
+            <Button
               onClick={() => {
                 setIsEditing(false);
                 setNewName(user.name);
               }}
-              className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500"
-            >
-              Cancel
-            </button>
+              label={"Cancel"}
+              className={"w-full"}
+            />
           </div>
         ) : (
-          <button
+          <Button
             onClick={() => setIsEditing(true)}
-            className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600"
-          >
-            Edit Name
-          </button>
+            label={"Edit Name"}
+            className={"mt-3 w-full"}
+          />
         )}
 
         <Link
           href="/"
-          className="block w-full bg-blue-700 text-white font-semibold p-2 rounded-lg hover:bg-blue-800 transition mt-6"
+          className="block py-1.5 bg-purple-500 text-white font-semibold  rounded-xl hover:scale-105 hover:shadow-xl transition-all duration-300 mt-3 cursor-pointer"
         >
           Add Your Todo
         </Link>
 
-        <button
-          className="mt-4 px-4 py-2 bg-gray-500 text-white hover:text-gray-200 rounded-lg cursor-pointer"
+        <Button
           onClick={() => {
             localStorage.removeItem("token");
             router.push("/login");
           }}
-        >
-          Logout
-        </button>
+          label={"Logout"}
+          className={"mt-6  py-1.5"}
+        />
       </div>
     </div>
   );
