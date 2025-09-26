@@ -6,11 +6,34 @@ import TodoItem from "@/components/TodoItem.jsx";
 import ShowCompletedTodo from "@/components/ShowCompletedTodo.jsx";
 import { addTodo, deleteTodo, getTodos, updateTodo } from "@/services/api";
 
+const ConfirmModal = ({ message, onConfirm, onCancel }) => (
+  <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm text-center">
+      <p className="mb-4">{message}</p>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={onConfirm}
+          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer"
+        >
+          Yes
+        </button>
+        <button
+          onClick={onCancel}
+          className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 cursor-pointer"
+        >
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 export default function Home() {
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [showCompletedTodo, setShowCompletedTodo] = useState(true);
+  const [todoToDelete, setTodoToDelete] = useState(null);
 
   useEffect(() => {
     fetchTodos();
@@ -52,16 +75,20 @@ export default function Home() {
   };
 
   // Delete
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Are you sure?");
-    if (!confirmDelete) return;
+  const handleDelete = async (id) => setTodoToDelete(id);
+
+  const confirmDelete = async () => {
+    if (!todoToDelete) return;
     try {
-      await deleteTodo(id);
-      setTodos((prev) => prev.filter((t) => t._id !== id));
+      await deleteTodo(todoToDelete);
+      setTodos((prev) => prev.filter((t) => t._id !== todoToDelete));
     } catch (err) {
-      console.error("Error deleting todo:", err);
+      console.error(err);
+    } finally {
+      setTodoToDelete(null);
     }
   };
+  const cancelDelete = () => setTodoToDelete(null);
 
   // Edit
 
@@ -135,6 +162,14 @@ export default function Home() {
           </div>
         )}
       </div>
+      {/* Confirmation Modal */}
+      {todoToDelete && (
+        <ConfirmModal
+          message="Are you sure you want to delete this todo?"
+          onConfirm={confirmDelete}
+          onCancel={cancelDelete}
+        />
+      )}
     </div>
   );
 }
