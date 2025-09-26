@@ -1,9 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Button from "@/ui/Button";
+import { UserContext } from "@/providers";
+import {
+  getProfile,
+  getToken,
+  removeToken,
+  updateProfile,
+} from "@/services/api";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -11,10 +18,11 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState("");
+  const { setUser: setUserInContext } = useContext(UserContext);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("token");
+      const token = getToken();
 
       if (!token) {
         router.push("/login");
@@ -22,22 +30,10 @@ export default function ProfilePage() {
       }
 
       try {
-        const res = await fetch("http://localhost:5000/user/profile", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          localStorage.removeItem("token");
-          router.push("/login");
-          return;
-        }
-
-        const data = await res.json();
-        setUser(data.data.user);
-        setNewName(data.data.user.name);
+        const profile = await getProfile();
+        setUser(profile);
+        setUser(profile.data.user);
+        setNewName(profile.data.user.name);
       } catch (err) {
         console.error("Error fetching user:", err);
       } finally {
@@ -49,27 +45,14 @@ export default function ProfilePage() {
   }, [router]);
 
   const handleUpdateName = async () => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (!token) return;
 
     try {
-      const res = await fetch("http://localhost:5000/user/profile", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name: newName }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to update name");
-      }
-
-      const data = await res.json();
+      const updated = await updateProfile();
 
       // update state with new user info
-      setUser((prev) => ({ ...prev, name: data.user.name }));
+      setUser((prev) => ({ ...prev, name: updated.user.name }));
       setIsEditing(false);
     } catch (err) {
       console.error("Error updating name:", err);
@@ -154,7 +137,8 @@ export default function ProfilePage() {
 
         <Button
           onClick={() => {
-            localStorage.removeItem("token");
+            removeToken();
+            setUserInContext({ isLogin: false, isSeller: false });
             router.push("/login");
           }}
           label={"Logout"}

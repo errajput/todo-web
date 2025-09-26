@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import "./globals.css";
 import { Roboto, Poppins } from "next/font/google";
+import Providers from "@/providers";
 export const metadata = {
   title: "Todo App",
   description:
@@ -27,10 +28,12 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${roboto.variable} ${poppins.variable}`}>
       <body>
         <div className="min-h-screen flex flex-col">
-          <Header />
-          <div className="flex-grow bg-gradient-to-tr from-purple-100 via-pink-100 to-yellow-100 p-6">
-            <main>{children}</main>
-          </div>
+          <Providers>
+            <Header />
+            <div className="flex-grow bg-gradient-to-tr from-purple-100 via-pink-100 to-yellow-100 p-6">
+              <main>{children}</main>
+            </div>
+          </Providers>
         </div>
       </body>
     </html>

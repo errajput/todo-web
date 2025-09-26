@@ -4,12 +4,7 @@ import { useEffect, useState } from "react";
 import InputContainer from "@/components/InputContainer.jsx";
 import TodoItem from "@/components/TodoItem.jsx";
 import ShowCompletedTodo from "@/components/ShowCompletedTodo.jsx";
-import {
-  addTodo,
-  deleteTodo,
-  getTodos,
-  updateTodo,
-} from "@/services/todos.api";
+import { addTodo, deleteTodo, getTodos, updateTodo } from "@/services/api";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
