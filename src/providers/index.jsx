@@ -3,10 +3,10 @@
 import { getProfile, isUserLogin } from "@/services/api";
 import { createContext, useEffect, useState } from "react";
 
-export const UserContext = createContext({ isLogin: false, isSeller: false });
+export const UserContext = createContext({ isLogin: false });
 
 const Providers = ({ children }) => {
-  const [user, setUser] = useState({ isLogin: false, isSeller: false });
+  const [user, setUser] = useState({ isLogin: false });
 
   useEffect(() => {
     const isLogin = isUserLogin();
@@ -14,21 +14,19 @@ const Providers = ({ children }) => {
     if (isLogin) {
       getProfile()
         .then((profile) => {
-          setUser({ isLogin: true, isSeller: profile.isSeller });
+          setUser({ isLogin: true });
         })
         .catch((err) => {
           console.error("Error fetching profile in Provider:", err.message);
-          setUser({ isLogin: false, isSeller: false });
+          setUser({ isLogin: false });
         });
     }
   }, []);
 
   return (
-    <>
-      <UserContext.Provider value={{ user, setUser }}>
-        {children}
-      </UserContext.Provider>
-    </>
+    <UserContext.Provider value={{ isLogin: user.isLogin, setUser }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 
