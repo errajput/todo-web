@@ -106,9 +106,9 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="text-3xl font-extrabold text-purple-700 m-6 text-center">
+      {/* <h1 className="text-3xl font-extrabold text-purple-700 m-6 text-center">
         Add your Todos here
-      </h1>
+      </h1> */}
 
       <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-purple-200">
         {/* <h1 className="text-2xl font-bold text-center text-purple-800 mb-4">
