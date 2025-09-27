@@ -83,13 +83,17 @@ export const logoutUser = () => {
 
 // Get all todos
 export const getTodos = async () => {
-  const res = await fetch(`${BASE_URL}/todos`, {
-    headers: getTokenHeader(),
-  });
-  if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
-  const data = await res.json();
+  try {
+    const res = await fetch(`${BASE_URL}/todos`, {
+      headers: getTokenHeader(),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
+    const data = await res.json();
 
-  return data.data;
+    return data.data;
+  } catch (error) {
+    window.location.href = "/login";
+  }
 };
 
 // Add new todo
