@@ -111,9 +111,9 @@ export default function Home() {
       </h1>
 
       <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-purple-200">
-        <h1 className="text-2xl font-bold text-center text-purple-800 mb-4">
+        {/* <h1 className="text-2xl font-bold text-center text-purple-800 mb-4">
           Todo App
-        </h1>
+        </h1> */}
 
         {/* Input + Add */}
         <InputContainer
@@ -141,7 +141,7 @@ export default function Home() {
         {todos.some((t) => t.isDone) && (
           <div>
             <div className="flex items-center justify-between">
-              <h2 className="text-purple-800 font-semibold ml-4">Completed</h2>
+              <h2 className="text-purple-700 font-semibold ml-4">Completed</h2>
               <ShowCompletedTodo
                 setShowCompletedTodo={setShowCompletedTodo}
                 showCompletedTodo={showCompletedTodo}

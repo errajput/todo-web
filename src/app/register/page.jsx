@@ -37,10 +37,10 @@ export default function RegisterPage() {
 
   return (
     <div className="flex items-center justify-center mt-20">
-      <div className="flex w-[700px] shadow-2xl rounded-2xl overflow-hidden">
+      <div className="flex w-[700px] h-[450px] shadow-2xl rounded-2xl overflow-hidden">
         {/* Left White Section */}
         <div className="w-1/2 bg-white p-6 flex flex-col justify-center">
-          <h2 className="text-2xl font-bold text-purple-700 mb-6">
+          <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center">
             Create Account
           </h2>
 
@@ -70,7 +70,7 @@ export default function RegisterPage() {
               className="w-full"
             />
 
-            <Button label="Register" className="w-full" />
+            <Button label="Register" className="w-full h-12" />
           </form>
 
           {message && (
@@ -85,7 +85,7 @@ export default function RegisterPage() {
             </p>
           )}
 
-          <p className="mt-8 text-center text-gray-700 text-sm">
+          {/* <p className="mt-8 text-center text-gray-700 text-sm">
             Already have an account?{" "}
             <Link
               href="/login"
@@ -93,7 +93,7 @@ export default function RegisterPage() {
             >
               Login
             </Link>
-          </p>
+          </p> */}
         </div>
 
         {/* Right Purple Section */}

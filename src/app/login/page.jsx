@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center mt-20">
-      <div className="flex w-[700px] shadow-2xl rounded-2xl overflow-hidden">
+      <div className="flex w-[700px] h-[400px] shadow-2xl rounded-2xl overflow-hidden">
         {/* Left Purple Section */}
         <div className="w-1/2 bg-purple-700 text-white flex flex-col items-center justify-center p-10">
           <h2 className="text-3xl font-bold mb-4">Welcome</h2>
@@ -63,7 +63,9 @@ export default function LoginPage() {
 
         {/* Right White Section */}
         <div className="w-1/2 bg-white p-10">
-          <h2 className="text-2xl font-bold text-purple-700 mb-6">Sign In</h2>
+          <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center">
+            Sign In
+          </h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="relative">
@@ -93,13 +95,13 @@ export default function LoginPage() {
               </Link>
             </div> */}
             <div className="text-center">
-              <Button label={"LOGIN"} className="w-full" />
+              <Button label={"LOGIN"} className="w-full !h-12" />
             </div>
           </form>
 
           {message && (
             <p
-              className={`mt-4 text-center text-sm font-medium ${
+              className={`mt-4 text-center text-base font-medium ${
                 message.toLowerCase().includes("successful")
                   ? "text-green-600"
                   : "text-red-500"
