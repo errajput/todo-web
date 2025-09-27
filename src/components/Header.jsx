@@ -1,16 +1,14 @@
 "use client";
 
+import { UserContext } from "@/providers";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLogin } = useContext(UserContext);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
-  }, []);
+  if (!isLogin) return;
 
   return (
     <header className="bg-gradient-to-tr from-purple-200 via-pink-200 to-yellow-200  text-purple-800 shadow-md p-2 flex justify-between items-center sticky top-0 z-50">
@@ -32,7 +30,7 @@ export default function Header() {
 
       {/* Desktop Nav */}
       <nav className="hidden md:flex space-x-9">
-        {isLoggedIn ? (
+        {isLogin ? (
           <Link
             href="/profile"
             className="cursor-pointer relative transition duration-300 hover:text-purple-600 font-bold
@@ -74,7 +72,7 @@ export default function Header() {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="absolute top-16 right-0 w-50 bg-purple-300/50 text-purple-800 flex flex-col items-center space-y-4 py-4 shadow-md md:hidden">
-          {isLoggedIn ? (
+          {isLogin ? (
             <Link
               href="/profile"
               className="nav-link cursor-pointer"
