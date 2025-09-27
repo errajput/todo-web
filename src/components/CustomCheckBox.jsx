@@ -2,12 +2,20 @@
 
 const CustomCheckbox = ({ onChange, checked }) => {
   return (
-    <label className="relative cursor-pointer">
+    <label className="relative">
       <input
         type="checkbox"
         onChange={onChange}
         checked={checked}
-        className=""
+        className="w-4 h-4 cursor-pointer appearance-none
+        text-center
+          border border-purple-400 rounded
+          checked:bg-purple-400
+          checked:border-purple-400
+          checked:[&::after]:content-['✔']
+          checked:[&::after]:text-purple-700
+          checked:[&::after]:block
+          checked:[&::after]:text-xs"
       />
     </label>
   );
