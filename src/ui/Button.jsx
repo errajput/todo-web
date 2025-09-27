@@ -4,7 +4,7 @@ const Button = ({ label, onClick, className }) => {
   return (
     <button
       className={cn(
-        "px-4 h-9 rounded-xl",
+        "px-4 h-12 rounded-xl",
         " bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500",
         " text-white font-bold",
         " shadow-lg",

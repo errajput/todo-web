@@ -130,7 +130,7 @@ export default function ProfilePage() {
 
         <Link
           href="/"
-          className="block py-1.5 bg-purple-500 text-white font-semibold  rounded-xl hover:scale-105 hover:shadow-xl transition-all duration-300 mt-3 cursor-pointer"
+          className="block py-3 bg-purple-500 text-white font-semibold  rounded-xl hover:scale-105 hover:shadow-xl transition-all duration-300 mt-3 cursor-pointer"
         >
           Add Your Todo
         </Link>
@@ -138,11 +138,11 @@ export default function ProfilePage() {
         <Button
           onClick={() => {
             removeToken();
-            setUserInContext({ isLogin: false, isSeller: false });
+            setUserInContext({ isLogin: false });
             router.push("/login");
           }}
           label={"Logout"}
-          className={"mt-6  py-1.5"}
+          className={"mt-6 "}
         />
       </div>
     </div>
