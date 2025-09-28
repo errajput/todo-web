@@ -1,6 +1,6 @@
 // src/services/api.js
 
-const BASE_URL = "http://localhost:5000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 // Token helpers
 export const getToken = () => localStorage.getItem("token");
@@ -23,7 +23,7 @@ export const getTokenHeader = () => {
 
 // Login
 export const loginUser = async (formData) => {
-  const res = await fetch(`${BASE_URL}/auth/login`, {
+  const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
@@ -36,7 +36,7 @@ export const loginUser = async (formData) => {
 
 // Register
 export const registerUser = async (formData) => {
-  const res = await fetch(`${BASE_URL}/auth/register`, {
+  const res = await fetch(`${API_URL}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
@@ -48,7 +48,7 @@ export const registerUser = async (formData) => {
 
 // Get profile
 export const getProfile = async () => {
-  const res = await fetch(`${BASE_URL}/user/profile`, {
+  const res = await fetch(`${API_URL}/user/profile`, {
     method: "GET",
     headers: getTokenHeader(),
   });
@@ -59,7 +59,7 @@ export const getProfile = async () => {
 
 // Update profile
 export const updateProfile = async (updateData) => {
-  const res = await fetch(`${BASE_URL}/user/profile`, {
+  const res = await fetch(`${API_URL}/user/profile`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -84,7 +84,7 @@ export const logoutUser = () => {
 // Get all todos
 export const getTodos = async () => {
   try {
-    const res = await fetch(`${BASE_URL}/todos`, {
+    const res = await fetch(`${API_URL}/todos`, {
       headers: getTokenHeader(),
     });
     if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
@@ -98,7 +98,7 @@ export const getTodos = async () => {
 
 // Add new todo
 export const addTodo = async (title) => {
-  const res = await fetch(`${BASE_URL}/todos`, {
+  const res = await fetch(`${API_URL}/todos`, {
     method: "POST",
     headers: getTokenHeader(),
     body: JSON.stringify({ title }),
@@ -110,7 +110,7 @@ export const addTodo = async (title) => {
 
 // Update todo
 export const updateTodo = async (id, updatedFields) => {
-  const res = await fetch(`${BASE_URL}/todos/${id}`, {
+  const res = await fetch(`${API_URL}/todos/${id}`, {
     method: "PATCH",
     headers: getTokenHeader(),
     body: JSON.stringify(updatedFields),
@@ -122,7 +122,7 @@ export const updateTodo = async (id, updatedFields) => {
 
 // Delete todo
 export const deleteTodo = async (id) => {
-  const res = await fetch(`${BASE_URL}/todos/${id}`, {
+  const res = await fetch(`${API_URL}/todos/${id}`, {
     method: "DELETE",
     headers: getTokenHeader(),
   });
