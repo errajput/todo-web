@@ -1,16 +1,23 @@
+import { cn } from "@/utils/function";
 import { useId } from "react";
 
-const EmailField = ({ value, onChange }) => {
+const EmailField = ({ value, onChange, className }) => {
   const id = useId();
   return (
-    <div>
+    <div className="relative">
       <input
         type="email"
         name="email"
         placeholder="Enter your email"
         value={value}
         onChange={onChange}
-        className="peer w-full px-5 py-3 rounded-xl border border-gray-400  placeholder-transparent focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none transition duration-300 focus:text-purple-500 text-gray-500"
+        className={cn(
+          "peer w-full px-3 py-3",
+          "rounded-xl border border-gray-400",
+          "placeholder-transparent focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none  focus:text-purple-500 text-gray-500",
+          " text-sm md:text-base  md:px-5 md:py-3",
+          "transition duration-300"
+        )}
         required
         id={id}
       />

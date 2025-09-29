@@ -31,9 +31,8 @@ export default function ProfilePage() {
 
       try {
         const profile = await getProfile();
-        setUser(profile);
-        setUser(profile.data.user);
-        setNewName(profile.data.user.name);
+        setUser(profile?.data?.user || null);
+        setNewName(profile?.data?.user?.name || "");
       } catch (err) {
         console.error("Error fetching user:", err);
       } finally {
@@ -49,9 +48,8 @@ export default function ProfilePage() {
     if (!token) return;
 
     try {
-      const updated = await updateProfile();
+      const updated = await updateProfile({ name: newName });
 
-      // update state with new user info
       setUser((prev) => ({ ...prev, name: updated.user.name }));
       setIsEditing(false);
     } catch (err) {
@@ -61,7 +59,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div>
+      <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg font-semibold text-purple-700">
           Loading profile...
         </p>
@@ -71,70 +69,73 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div>
+      <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg font-semibold text-red-600">No user found</p>
       </div>
     );
   }
 
   return (
-    <div className="h-100 flex items-center justify-center m-12">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 text-center">
-        <h1 className="text-3xl font-extrabold text-purple-700 mb-6">
+    <div className="flex items-center justify-center min-h-screen ">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-6 sm:p-8 text-center">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-purple-700 mb-6">
           Profile 👤
         </h1>
 
-        <div className="space-y-3 text-gray-700">
-          <p>
+        {/* User Info */}
+        <div className="space-y-4 text-gray-700 text-sm sm:text-base">
+          <p className="break-words">
             <span className="font-semibold">Name:</span>{" "}
             {isEditing ? (
               <input
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="border px-2 py-1 rounded ml-2"
+                className="border px-3 py-2 rounded w-full sm:w-auto mt-2 sm:mt-0"
               />
             ) : (
               user.name
             )}
           </p>
-          <p>
+          <p className="break-words">
             <span className="font-semibold">Email:</span> {user.email}
           </p>
         </div>
 
+        {/* Action Buttons */}
         {isEditing ? (
-          <div className="mt-4 flex gap-3 justify-center">
+          <div className="mt-5 flex flex-col sm:flex-row gap-3">
             <Button
               label={"Save"}
               onClick={handleUpdateName}
-              className={"w-full"}
+              className="w-full"
             />
-
             <Button
               onClick={() => {
                 setIsEditing(false);
                 setNewName(user.name);
               }}
               label={"Cancel"}
-              className={"w-full"}
+              className="w-full"
             />
           </div>
         ) : (
           <Button
             onClick={() => setIsEditing(true)}
             label={"Edit Name"}
-            className={"mt-3 w-full"}
+            className="mt-5 w-full"
           />
         )}
 
+        {/* Add Todo Link */}
         <Link
           href="/"
-          className="block py-3 bg-purple-500 text-white font-semibold  rounded-xl hover:scale-105 hover:shadow-xl transition-all duration-300 mt-3 cursor-pointer"
+          className="block py-3 mt-5 bg-purple-500 text-white font-semibold rounded-xl hover:scale-105 hover:shadow-lg transition-all duration-300 text-sm sm:text-base"
         >
           Add Your Todo
         </Link>
 
+        {/* Logout */}
         <Button
           onClick={() => {
             removeToken();
@@ -142,7 +143,7 @@ export default function ProfilePage() {
             router.push("/login");
           }}
           label={"Logout"}
-          className={"mt-6 "}
+          className="mt-5"
         />
       </div>
     </div>

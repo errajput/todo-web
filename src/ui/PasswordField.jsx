@@ -1,6 +1,7 @@
+import { cn } from "@/utils/function";
 import { useId, useState } from "react";
 
-const PasswordField = ({ value, onChange }) => {
+const PasswordField = ({ value, onChange, className }) => {
   const [showPassword, setShowPassword] = useState(false);
   const id = useId();
   return (
@@ -11,7 +12,15 @@ const PasswordField = ({ value, onChange }) => {
         placeholder="Enter your password"
         value={value}
         onChange={onChange}
-        className="peer w-full px-5 py-3 rounded-xl border border-gray-400  placeholder-transparent focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none transition duration-300 focus:text-purple-500 text-gray-500"
+        className={cn(
+          "peer block mx-auto",
+          " md:w-full  md:h-12 md:px-5 md:py-3 md:text-base",
+          " rounded-xl border border-gray-400  placeholder-transparent",
+          " focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none  focus:text-purple-500 text-gray-500",
+          "transition duration-300",
+          "w-full text-sm px-3 py-3 ",
+          className
+        )}
         required
         id={id}
       />

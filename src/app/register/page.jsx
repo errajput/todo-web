@@ -36,46 +36,40 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center mt-20">
-      <div className="flex w-[700px] h-[450px] shadow-2xl rounded-2xl overflow-hidden">
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="flex flex-col md:flex-row w-full max-w-3xl shadow-2xl rounded-2xl overflow-hidden">
         {/* Left White Section */}
-        <div className="w-1/2 bg-white p-6 flex flex-col justify-center">
-          <h2 className="text-2xl font-bold text-purple-700 mb-6 text-center">
+        <div className="w-full md:w-1/2 bg-white p-6 flex flex-col justify-center">
+          <h2 className="text-xl md:text-2xl font-bold text-purple-700 mb-6 text-center">
             Create Account
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="relative">
-              <TextField
-                label="Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </div>
-            <div className="relative">
-              <EmailField
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <TextField
+              label="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+
+            <EmailField
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
 
             <PasswordField
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full"
             />
 
-            <Button label="Register" className="w-full h-12" />
+            <Button label="Register" />
           </form>
 
           {message && (
             <p
-              className={`mt-4 text-center text-sm font-medium ${
+              className={`mt-3 text-center text-sm font-medium ${
                 message.toLowerCase().includes("success")
                   ? "text-green-600"
                   : "text-red-500"
@@ -85,7 +79,7 @@ export default function RegisterPage() {
             </p>
           )}
 
-          {/* <p className="mt-8 text-center text-gray-700 text-sm">
+          <p className=" mt-6 text-center text-gray-700 text-sm block md:hidden">
             Already have an account?{" "}
             <Link
               href="/login"
@@ -93,14 +87,16 @@ export default function RegisterPage() {
             >
               Login
             </Link>
-          </p> */}
+          </p>
         </div>
 
-        {/* Right Purple Section */}
-        <div className="w-1/2 bg-purple-700 text-white flex flex-col items-center justify-center p-10">
-          <h2 className="text-3xl font-bold mb-4">Welcome Back 👋</h2>
+        {/* Right Purple Section - Hidden on mobile */}
+        <div className="hidden md:flex w-1/2 bg-purple-700 text-white flex-col items-center justify-center p-10">
+          <h2 className="text-3xl font-bold mb-4 text-center">
+            Welcome Back 👋
+          </h2>
           <p className="text-center mb-6">
-            Sign in and continue your amazing journey with us To Adding your
+            Sign in and continue your amazing journey with us to adding your
             daily Todos.
           </p>
           <Link
