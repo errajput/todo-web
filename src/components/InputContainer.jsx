@@ -8,13 +8,14 @@ export default function InputContainer({
   handleAdd,
 }) {
   return (
-    <div className="flex m-4 gap-2 justify-center mb-4 ">
+    <div className="flex flex-row mt-6 sm:mt-6 gap-3 justify-center mb-4">
       <input
         type="text"
         placeholder="Enter a task..."
-        className="flex-1 border border-purple-200 rounded-md px-3 py-2 
+        className="flex-1 border border-purple-200 rounded-md px-2 py-1
                    outline-none focus:ring-2 focus:ring-purple-200 
-                   bg-white text-purple-700 placeholder:text-purple-300"
+                   bg-white text-purple-700 placeholder:text-purple-300
+                   text-sm sm:text-sm w-full "
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={(e) => {
@@ -26,11 +27,11 @@ export default function InputContainer({
       <button
         onClick={handleAdd}
         aria-label="Add todo"
-        className="px-3 py-2 rounded-md bg-purple-50 text-purple-700 border border-purple-200 
+        className=" rounded-md bg-purple-50 text-purple-700 border border-purple-200 
                    hover:bg-purple-200 cursor-pointer transition-colors duration-200 
-                   flex items-center justify-center"
+                   flex items-center justify-center  w-8 h-8 sm:w-auto sm:h-auto sm:px-3 sm:py-2"
       >
-        <PlusIcon className="h-5 w-5" />
+        <PlusIcon className="h-3 w-3 sm:h-5 sm:w-5" />
       </button>
     </div>
   );

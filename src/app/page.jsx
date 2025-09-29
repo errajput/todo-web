@@ -6,20 +6,25 @@ import TodoItem from "@/components/TodoItem.jsx";
 import ShowCompletedTodo from "@/components/ShowCompletedTodo.jsx";
 import { addTodo, deleteTodo, getTodos, updateTodo } from "@/services/api";
 
+// Responsive Confirm Modal
 const ConfirmModal = ({ message, onConfirm, onCancel }) => (
-  <div className="fixed inset-0 flex items-center justify-center backdrop-blur-sm z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm text-center">
-      <p className="mb-4">{message}</p>
-      <div className="flex justify-center gap-4">
+  <div className="fixed inset-0 flex items-center justify-center sm:items-center sm:justify-center backdrop-blur-sm z-50">
+    {/* Desktop Centered / Mobile Bottom Sheet */}
+    <div
+      className="bg-white w-full sm:w-auto rounded-t-xl sm:rounded-lg shadow-lg p-4 sm:p-6 
+                    absolute bottom-0 sm:static"
+    >
+      <p className="mb-4 text-center text-sm sm:text-base">{message}</p>
+      <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
         <button
           onClick={onConfirm}
-          className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 cursor-pointer"
+          className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
         >
           Yes
         </button>
         <button
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 cursor-pointer"
+          className="w-full sm:w-auto px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
         >
           No
         </button>
@@ -91,11 +96,9 @@ export default function Home() {
   const cancelDelete = () => setTodoToDelete(null);
 
   // Edit
-
   const handleEdit = async (id) => {
     try {
       const item = todos.find((t) => t._id === id);
-      // console.log("Found item:", item);
       if (!item) return;
       setInputValue(item.title);
       setEditingId(id);
@@ -105,25 +108,19 @@ export default function Home() {
   };
 
   return (
-    <div>
-      {/* <h1 className="text-3xl font-extrabold text-purple-700 m-6 text-center">
-        Add your Todos here
-      </h1> */}
-
-      <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg border border-purple-200">
-        {/* <h1 className="text-2xl font-bold text-center text-purple-800 mb-4">
-          Todo App
-        </h1> */}
-
-        {/* Input + Add */}
-        <InputContainer
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-          handleAdd={handleAdd}
-        />
+    <div className=" sm:px-6 lg:px-8">
+      <div className="w-full max-w-lg sm:max-w-2xl lg:max-w-xl mx-auto mt-6 sm:mt-10 p-3 sm:p-6 bg-white shadow-lg rounded-lg border border-purple-200">
+        {/* Input + Add (responsive layout) */}
+        <div className="flex flex-col  gap-2 sm:gap-3">
+          <InputContainer
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            handleAdd={handleAdd}
+          />
+        </div>
 
         {/* Active Todos */}
-        <div>
+        <div className="mt-4 space-y-3">
           {todos
             .filter((t) => t && !t.isDone)
             .map((v) => (
@@ -133,35 +130,46 @@ export default function Home() {
                 markDone={() => markDone(v._id, v.isDone)}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
+                responsive
               />
             ))}
         </div>
 
         {/* Completed Todos */}
         {todos.some((t) => t.isDone) && (
-          <div>
-            <div className="flex items-center justify-between">
-              <h2 className="text-purple-700 font-semibold ml-4">Completed</h2>
+          <div className="mt-6">
+            <div
+              className="flex items-center justify-between cursor-pointer"
+              onClick={() => setShowCompletedTodo(!showCompletedTodo)}
+            >
+              <h2 className="text-purple-700 font-semibold text-sm sm:text-base">
+                Completed
+              </h2>
               <ShowCompletedTodo
                 setShowCompletedTodo={setShowCompletedTodo}
                 showCompletedTodo={showCompletedTodo}
               />
             </div>
-            {showCompletedTodo &&
-              todos
-                .filter((t) => t && t.isDone)
-                .map((todo) => (
-                  <TodoItem
-                    key={todo._id}
-                    v={todo}
-                    markDone={() => markDone(todo._id, todo.isDone)}
-                    handleDelete={() => handleDelete(todo._id)}
-                    handleEdit={() => handleEdit(todo._id, todo.title)}
-                  />
-                ))}
+            {showCompletedTodo && (
+              <div className="mt-2 space-y-3">
+                {todos
+                  .filter((t) => t && t.isDone)
+                  .map((todo) => (
+                    <TodoItem
+                      key={todo._id}
+                      v={todo}
+                      markDone={() => markDone(todo._id, todo.isDone)}
+                      handleDelete={() => handleDelete(todo._id)}
+                      handleEdit={() => handleEdit(todo._id, todo.title)}
+                      responsive
+                    />
+                  ))}
+              </div>
+            )}
           </div>
         )}
       </div>
+
       {/* Confirmation Modal */}
       {todoToDelete && (
         <ConfirmModal

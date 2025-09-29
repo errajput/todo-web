@@ -29,7 +29,7 @@ export default function Header() {
       </div>
 
       {/* Desktop Nav */}
-      <nav className="hidden md:flex space-x-9">
+      <nav className="">
         {isLogin ? (
           <Link
             href="/profile"
@@ -60,46 +60,6 @@ export default function Header() {
           </>
         )}
       </nav>
-
-      {/* Mobile Toggle Button */}
-      <button
-        className="md:hidden text-2xl focus:outline-none cursor-pointer"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? "✖" : "☰"}
-      </button>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="absolute top-16 right-0 w-50 bg-purple-300/50 text-purple-800 flex flex-col items-center space-y-4 py-4 shadow-md md:hidden">
-          {isLogin ? (
-            <Link
-              href="/profile"
-              className="nav-link cursor-pointer"
-              onClick={() => setMenuOpen(false)}
-            >
-              Profile
-            </Link>
-          ) : (
-            <>
-              <Link
-                href="/register"
-                className="nav-link cursor-pointer hover:text-purple-400"
-                onClick={() => setMenuOpen(false)}
-              >
-                Register
-              </Link>
-              <Link
-                href="/login"
-                className="nav-link cursor-pointer hover:text-purple-400"
-                onClick={() => setMenuOpen(false)}
-              >
-                Login
-              </Link>
-            </>
-          )}
-        </div>
-      )}
     </header>
   );
 }

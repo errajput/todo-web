@@ -7,10 +7,10 @@ export default function EditButton({ onClick }) {
     <button
       onClick={onClick}
       className="bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-200 
-      px-2 py-1 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-center"
+      px-1 py-1 sm:px-2 sm:py-1 rounded-md transition-colors duration-200 cursor-pointer flex items-center justify-center"
       aria-label="Edit todo"
     >
-      <PencilIcon className="h-5 w-5" />
+      <PencilIcon className="h-4 w-4 sm:h-5 sm:w-5" />
     </button>
   );
 }

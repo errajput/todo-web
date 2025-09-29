@@ -7,7 +7,7 @@ const CustomCheckbox = ({ onChange, checked }) => {
         type="checkbox"
         onChange={onChange}
         checked={checked}
-        className="w-4 h-4 cursor-pointer appearance-none
+        className="w-3 h-3 sm:w-4 sm:h-4 cursor-pointer appearance-none
         text-center
           border border-purple-400 rounded
           checked:bg-purple-400
