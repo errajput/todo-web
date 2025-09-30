@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
         <div className="min-h-screen flex flex-col">
           <Providers>
             <Header />
-            <div className="flex-grow bg-gradient-to-tr from-purple-100 via-pink-100 to-yellow-100 p-6">
+            <div className="flex-grow bg-gradient-to-tr from-purple-100 via-pink-100 to-yellow-100 p-2">
               <main>{children}</main>
             </div>
           </Providers>

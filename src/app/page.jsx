@@ -108,8 +108,8 @@ export default function Home() {
   };
 
   return (
-    <div className=" sm:px-6 lg:px-8">
-      <div className="w-full max-w-lg sm:max-w-2xl lg:max-w-xl mx-auto mt-6 sm:mt-10 p-3 sm:p-6 bg-white shadow-lg rounded-lg border border-purple-200">
+    <div>
+      <div className=" max-w-lg mx-auto mt-2 sm:mt-2 p-3 sm:p-6 bg-white shadow-lg rounded-lg border border-purple-200">
         {/* Input + Add (responsive layout) */}
         <div className="flex flex-col  gap-2 sm:gap-3">
           <InputContainer

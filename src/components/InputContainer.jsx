@@ -8,7 +8,7 @@ export default function InputContainer({
   handleAdd,
 }) {
   return (
-    <div className="flex flex-row mt-6 sm:mt-6 gap-3 justify-center mb-4">
+    <div className="flex flex-row  gap-3 justify-center ">
       <input
         type="text"
         placeholder="Enter a task..."
