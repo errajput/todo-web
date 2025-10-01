@@ -39,10 +39,12 @@ export default function Home() {
   const [editingId, setEditingId] = useState(null);
   const [showCompletedTodo, setShowCompletedTodo] = useState(true);
   const [todoToDelete, setTodoToDelete] = useState(null);
+  const [draggingId, setDraggingId] = useState(null);
 
   useEffect(() => {
     fetchTodos();
   }, []);
+
   const fetchTodos = async () => {
     try {
       const todos = await getTodos();
@@ -107,6 +109,20 @@ export default function Home() {
     }
   };
 
+  const handleDrop = (dropId) => {
+    const newTodos = [...todos];
+
+    const draggingIndex = newTodos.findIndex((todo) => todo.id === draggingId);
+
+    const dropToIndex = newTodos.findIndex((todo) => todo.id === dropId);
+
+    const draggingTodo = newTodos[draggingIndex];
+    const dropToTodo = newTodos[dropToIndex];
+
+    newTodos[draggingIndex] = dropToTodo;
+    newTodos[dropToIndex] = draggingTodo;
+    setTodos(newTodos);
+  };
   return (
     <div>
       <div className=" max-w-lg mx-auto mt-2 sm:mt-2 p-3 sm:p-6 bg-white shadow-lg rounded-lg border border-purple-200">
@@ -123,6 +139,7 @@ export default function Home() {
         <div className="mt-4 space-y-3">
           {todos
             .filter((t) => t && !t.isDone)
+            .reverse()
             .map((v) => (
               <TodoItem
                 key={v._id || v.id}
@@ -130,6 +147,9 @@ export default function Home() {
                 markDone={() => markDone(v._id, v.isDone)}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
+                setDraggingId={setDraggingId}
+                onDragOver={(e) => e.preventDefault()}
+                handleDropDrag={handleDrop}
                 responsive
               />
             ))}
@@ -154,6 +174,7 @@ export default function Home() {
               <div className="mt-2 space-y-3">
                 {todos
                   .filter((t) => t && t.isDone)
+
                   .map((todo) => (
                     <TodoItem
                       key={todo._id}
