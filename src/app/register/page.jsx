@@ -36,8 +36,18 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="flex flex-col md:flex-row w-full max-w-3xl shadow-2xl rounded-2xl overflow-hidden">
+    <div className="flex flex-col items-center justify-center px-4 py-8">
+      <div className="flex items-center justify-center gap-3 mb-6">
+        <img
+          src="/iconTodo.png"
+          alt="Todo APP"
+          className="w-12 h-12 mx-auto "
+        />
+        <h2 className="text-purple-600 text-2xl sm:text-4xl font-extrabold mt-3">
+          Todo Web
+        </h2>
+      </div>
+      <div className="flex flex-col md:flex-row w-full max-w-3xl shadow-2xl rounded-2xl overflow-hidden ">
         {/* Left White Section */}
         <div className="w-full md:w-1/2 bg-white p-6 flex flex-col justify-center">
           <h2 className="text-xl md:text-2xl font-bold text-purple-700 mb-6 text-center">

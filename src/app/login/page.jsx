@@ -43,42 +43,56 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen ">
-      <div className="flex flex-col md:flex-row w-full max-w-2xl shadow-2xl rounded-2xl overflow-hidden">
-        {/* Left Purple Section - hidden on mobile */}
-        <div className="hidden md:flex w-1/2 bg-purple-700 text-white flex-col items-center justify-center p-10">
-          <h2 className="text-3xl font-bold mb-4">Welcome</h2>
-          <p className="text-center mb-6">
-            Join Our Unique Platform, Explore a New Experience with Adding your
-            Daily Todos.
+    <div className="flex flex-col items-center justify-center px-4 py-8">
+      {/* App Logo */}
+      <div className="flex items-center justify-center gap-3 mb-6">
+        <img
+          src="/iconTodo.png"
+          alt="Todo APP"
+          className="w-12 h-12 mx-auto "
+        />
+        <h2 className="text-purple-600 text-2xl sm:text-4xl font-extrabold mt-3">
+          Todo Web
+        </h2>
+      </div>
+
+      {/* Card Container */}
+      <div className="flex flex-col md:flex-row w-full max-w-3xl shadow-2xl rounded-2xl overflow-hidden bg-white">
+        {/* Left Purple Section (Hidden on Mobile) */}
+        <div className="hidden md:flex w-1/2 bg-purple-700 text-white flex-col items-center justify-center px-8 py-12">
+          <h2 className="text-2xl font-bold mb-4">Welcome Back</h2>
+          <p className="text-center text-sm mb-6 leading-relaxed">
+            Join our unique platform and explore a new experience by adding and
+            managing your daily Todos.
           </p>
           <Link
             href="/register"
-            className="px-6 py-2 border border-white rounded-lg hover:bg-white hover:text-purple-700 transition"
+            className="px-6 py-2 border border-white rounded-lg hover:bg-white hover:text-purple-700 transition font-medium"
           >
             REGISTER
           </Link>
         </div>
 
         {/* Right White Section */}
-        <div className="w-full md:w-1/2 bg-white p-6 md:p-10 flex flex-col justify-center">
-          <h2 className="text-xl md:text-2xl font-bold text-purple-700 mb-6 text-center">
+        <div className="w-full md:w-1/2 bg-white p-6 sm:p-8 md:p-10 flex flex-col justify-center">
+          <h2 className="text-xl sm:text-2xl font-bold text-purple-700 mb-6 text-center">
             Sign In
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <EmailField value={formData.email} onChange={handleChange} />
-
             <PasswordField value={formData.password} onChange={handleChange} />
 
             <div className="text-center">
-              <Button label={"LOGIN"} />
+              <Button label={"LOGIN"} className="w-full sm:w-auto" />
             </div>
           </form>
 
+          {/* Message */}
           {message && (
             <p
-              className={`mt-3 text-center text-sm md:text-base font-medium ${
+              className={`mt-4 text-center text-sm sm:text-base font-medium ${
                 message.toLowerCase().includes("successful")
                   ? "text-green-600"
                   : "text-red-500"
