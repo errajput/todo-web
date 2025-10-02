@@ -130,3 +130,15 @@ export const deleteTodo = async (id) => {
   if (!res.ok) throw new Error(data.message || "Failed to delete todo");
   return data;
 };
+
+// Delete todo
+export const reOrderTodo = async (payload) => {
+  const res = await fetch(`${API_URL}/todos/reorder`, {
+    method: "PUT",
+    headers: getTokenHeader(),
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Failed to reorder todo");
+  return data;
+};

@@ -7,7 +7,13 @@ import TodoItem from "@/components/TodoItem";
 import ShowCompletedTodo from "@/components/ShowCompletedTodo";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
-import { addTodo, deleteTodo, getTodos, updateTodo } from "@/services/api";
+import {
+  addTodo,
+  deleteTodo,
+  getTodos,
+  reOrderTodo,
+  updateTodo,
+} from "@/services/api";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -96,6 +102,18 @@ export default function Home() {
 
     newTodos[draggingIndex] = dropToTodo;
     newTodos[dropToIndex] = draggingTodo;
+    const updatedTodoOrder = [
+      { _id: draggingId, order: dropToIndex },
+      { _id: dropId, order: draggingIndex },
+    ];
+
+    reOrderTodo(updatedTodoOrder)
+      .then((res) => {
+        console.log("Order Updated", res);
+      })
+      .catch((e) => {
+        console.log("Error in order update", e);
+      });
 
     setTodos(newTodos);
   };
