@@ -1,3 +1,5 @@
+import Button from "@/ui/Button";
+
 /**
  *
  * @param {{message: string, onConfirm: () => void, onCancel: ()=> void}}
@@ -11,18 +13,17 @@ const ConfirmDialog = ({ message, onConfirm, onCancel }) => (
     >
       <p className="mb-4 text-center text-sm sm:text-base">{message}</p>
       <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-        <button
+        <Button
+          label={"Yes"}
           onClick={onConfirm}
-          className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-        >
-          Yes
-        </button>
-        <button
+          className=" md:!h-10 md:!w-30 bg-red-500 text-white hover:bg-red-600"
+        />
+
+        <Button
+          label={"No"}
           onClick={onCancel}
-          className="w-full sm:w-auto px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-        >
-          No
-        </button>
+          className="md:!h-10 md:!w-30 bg-gray-300 text-gray-800 hover:bg-gray-400"
+        />
       </div>
     </div>
   </div>
