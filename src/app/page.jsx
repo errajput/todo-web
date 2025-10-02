@@ -1,37 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import InputContainer from "@/components/InputContainer.jsx";
-import TodoItem from "@/components/TodoItem.jsx";
-import ShowCompletedTodo from "@/components/ShowCompletedTodo.jsx";
-import { addTodo, deleteTodo, getTodos, updateTodo } from "@/services/api";
 
-// Responsive Confirm Modal
-const ConfirmModal = ({ message, onConfirm, onCancel }) => (
-  <div className="fixed inset-0 flex items-center justify-center sm:items-center sm:justify-center backdrop-blur-sm z-50">
-    {/* Desktop Centered / Mobile Bottom Sheet */}
-    <div
-      className="bg-white w-full sm:w-auto rounded-t-xl sm:rounded-lg shadow-lg p-4 sm:p-6 
-                    absolute bottom-0 sm:static"
-    >
-      <p className="mb-4 text-center text-sm sm:text-base">{message}</p>
-      <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-        <button
-          onClick={onConfirm}
-          className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-        >
-          Yes
-        </button>
-        <button
-          onClick={onCancel}
-          className="w-full sm:w-auto px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
-        >
-          No
-        </button>
-      </div>
-    </div>
-  </div>
-);
+import InputContainer from "@/components/InputContainer";
+import TodoItem from "@/components/TodoItem";
+import ShowCompletedTodo from "@/components/ShowCompletedTodo";
+import ConfirmDialog from "@/components/ConfirmDialog";
+
+import { addTodo, deleteTodo, getTodos, updateTodo } from "@/services/api";
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -112,17 +88,18 @@ export default function Home() {
   const handleDrop = (dropId) => {
     const newTodos = [...todos];
 
-    const draggingIndex = newTodos.findIndex((todo) => todo.id === draggingId);
-
-    const dropToIndex = newTodos.findIndex((todo) => todo.id === dropId);
+    const draggingIndex = newTodos.findIndex((todo) => todo._id === draggingId);
+    const dropToIndex = newTodos.findIndex((todo) => todo._id === dropId);
 
     const draggingTodo = newTodos[draggingIndex];
     const dropToTodo = newTodos[dropToIndex];
 
     newTodos[draggingIndex] = dropToTodo;
     newTodos[dropToIndex] = draggingTodo;
+
     setTodos(newTodos);
   };
+
   return (
     <div>
       <div className=" max-w-lg mx-auto mt-2 sm:mt-2 p-3 sm:p-6 bg-white shadow-lg rounded-lg border border-purple-200">
@@ -148,7 +125,6 @@ export default function Home() {
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
                 setDraggingId={setDraggingId}
-                onDragOver={(e) => e.preventDefault()}
                 handleDropDrag={handleDrop}
                 responsive
               />
@@ -174,7 +150,6 @@ export default function Home() {
               <div className="mt-2 space-y-3">
                 {todos
                   .filter((t) => t && t.isDone)
-
                   .map((todo) => (
                     <TodoItem
                       key={todo._id}
@@ -193,7 +168,7 @@ export default function Home() {
 
       {/* Confirmation Modal */}
       {todoToDelete && (
-        <ConfirmModal
+        <ConfirmDialog
           message="Are you sure you want to delete this todo?"
           onConfirm={confirmDelete}
           onCancel={cancelDelete}

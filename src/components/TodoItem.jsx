@@ -15,12 +15,12 @@ const TodoItem = ({
 }) => {
   return (
     <div
-      key={v.id}
+      key={v._id}
       className="rounded-md text-purple-700"
       draggable
-      onDragStart={() => setDraggingId(v.id)}
+      onDragStart={() => setDraggingId(v._id)}
       onDragOver={(e) => e.preventDefault()}
-      onDrop={() => handleDropDrag(v.id)}
+      onDrop={() => handleDropDrag(v._id)}
     >
       <div className="flex items-center gap-2 sm:gap-4">
         <Squares2X2Icon className="h-2 w-2 sm:h-3 sm:w-3 text-purple-700 cursor-move" />
