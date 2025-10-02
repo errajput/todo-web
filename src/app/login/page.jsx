@@ -104,7 +104,7 @@ export default function LoginPage() {
 
           {/* Show register link only on mobile */}
           <p className="mt-6 text-center text-gray-700 text-sm block md:hidden">
-            Don’t have an account?{" "}
+            Don't have an account?{" "}
             <Link
               href="/register"
               className="text-purple-600 font-semibold hover:underline"
