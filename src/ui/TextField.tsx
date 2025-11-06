@@ -1,25 +1,43 @@
 import { cn } from "@/utils/function";
-import { useId } from "react";
+import { useId, ChangeEvent } from "react";
 
-const TextField = ({ label, value, onChange, placeholder, className }) => {
+interface TextFieldProps {
+  label?: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  className?: string;
+  name?: string;
+}
+
+const TextField: React.FC<TextFieldProps> = ({
+  label,
+  value,
+  onChange,
+  placeholder,
+  className,
+  name = "name",
+}) => {
   const id = useId();
+
   return (
     <div className="relative">
       <input
         type="text"
-        name="name"
-        placeholder={placeholder || `Enter your ${label}`}
+        id={id}
+        name={name}
+        placeholder={placeholder || `Enter your ${label || "value"}`}
         value={value}
         onChange={onChange}
         className={cn(
           "peer w-full px-5 py-3",
-          "rounded-xl border border-gray-400  placeholder-transparent",
+          "rounded-xl border border-gray-400 placeholder-transparent",
           "focus:border-purple-500 focus:ring-1 focus:ring-purple-500 focus:outline-none focus:text-purple-500 text-gray-500",
           "transition duration-300",
-          "text-sm md:text-base md:px-5 md:py-3"
+          "text-sm md:text-base md:px-5 md:py-3",
+          className
         )}
         required
-        id={id}
       />
       {label && (
         <label

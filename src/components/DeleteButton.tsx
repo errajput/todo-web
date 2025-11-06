@@ -1,8 +1,13 @@
 "use client";
 
 import { TrashIcon } from "@heroicons/react/24/outline";
+import React from "react";
 
-export default function DeleteButton({ onClick }) {
+interface DeleteButtonProps {
+  onClick: () => void;
+}
+
+const DeleteButton: React.FC<DeleteButtonProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -13,4 +18,6 @@ export default function DeleteButton({ onClick }) {
       <TrashIcon className="h-4 w-4 sm:h-5 sm:w-5" />
     </button>
   );
-}
+};
+
+export default DeleteButton;

@@ -1,6 +1,12 @@
 import { cn } from "@/utils/function";
 
-const Button = ({ label, onClick, className }) => {
+interface ButtonProps {
+  label: string;
+  onClick?: () => void;
+  className?: string;
+}
+
+const Button: React.FC<ButtonProps> = ({ label, onClick, className }) => {
   const hasCustomBg = className?.split(" ").some((c) => c.startsWith("bg-"));
 
   return (

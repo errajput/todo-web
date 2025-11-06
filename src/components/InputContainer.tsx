@@ -1,12 +1,19 @@
 "use client";
 
 import { PlusIcon } from "@heroicons/react/24/outline";
+import React from "react";
 
-export default function InputContainer({
+interface InputContainerProps {
+  inputValue: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  handleAdd: () => void;
+}
+
+const InputContainer: React.FC<InputContainerProps> = ({
   inputValue,
   setInputValue,
   handleAdd,
-}) {
+}) => {
   return (
     <div className="flex flex-row  gap-3 justify-center ">
       <input
@@ -17,8 +24,10 @@ export default function InputContainer({
                    bg-white text-purple-700 placeholder:text-purple-300
                    text-sm sm:text-sm w-full "
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={(e) => {
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setInputValue(e.target.value)
+        }
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             handleAdd();
           }
@@ -35,4 +44,5 @@ export default function InputContainer({
       </button>
     </div>
   );
-}
+};
+export default InputContainer;

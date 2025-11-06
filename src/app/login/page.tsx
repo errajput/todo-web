@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext, useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -9,28 +9,38 @@ import PasswordField from "@/ui/PasswordField";
 import Button from "@/ui/Button";
 import { loginUser } from "@/services/api";
 import { UserContext } from "@/providers";
+import Image from "next/image";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
   });
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string>("");
   const router = useRouter();
   const { setUser } = useContext(UserContext);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!formData.email || !formData.password) {
       setMessage("Please fill all fields.");
       return;
     }
+
     try {
       const data = await loginUser(formData);
+
       if (data?.data?.token) {
         localStorage.setItem("token", data.data.token);
         setUser({ isLogin: true });
@@ -38,6 +48,7 @@ export default function LoginPage() {
         setTimeout(() => router.push("/profile"), 1500);
       }
     } catch (err) {
+      console.error("Login error:", err);
       setMessage("Invalid email or password 🚨");
     }
   };
@@ -46,10 +57,10 @@ export default function LoginPage() {
     <div className="flex flex-col items-center justify-center px-4 py-8">
       {/* App Logo */}
       <div className="flex items-center justify-center gap-3 mb-6">
-        <img
+        <Image
           src="/iconTodo.png"
           alt="Todo APP"
-          className="w-12 h-12 mx-auto "
+          className="w-12 h-12 mx-auto"
         />
         <h2 className="text-purple-600 text-2xl sm:text-4xl font-extrabold mt-3">
           Todo Web
@@ -85,7 +96,7 @@ export default function LoginPage() {
             <PasswordField value={formData.password} onChange={handleChange} />
 
             <div className="text-center">
-              <Button label={"LOGIN"} className="w-full sm:w-auto" />
+              <Button label="LOGIN" className="w-full sm:w-auto" />
             </div>
           </form>
 
@@ -104,7 +115,7 @@ export default function LoginPage() {
 
           {/* Show register link only on mobile */}
           <p className="mt-6 text-center text-gray-700 text-sm block md:hidden">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
               className="text-purple-600 font-semibold hover:underline"

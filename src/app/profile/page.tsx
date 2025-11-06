@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { JSX, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Button from "@/ui/Button";
@@ -12,18 +12,31 @@ import {
   updateProfile,
 } from "@/services/api";
 
-export default function ProfilePage() {
+// 👤 Define types for user and context
+interface User {
+  name: string;
+  email: string;
+  _id?: string;
+}
+
+interface UserContextType {
+  setUser: (user: { isLogin: boolean }) => void;
+}
+
+export default function ProfilePage(): JSX.Element {
   const router = useRouter();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newName, setNewName] = useState("");
-  const { setUser: setUserInContext } = useContext(UserContext);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newName, setNewName] = useState<string>("");
+
+  const { setUser: setUserInContext } = useContext(
+    UserContext
+  ) as UserContextType;
 
   useEffect(() => {
     const fetchUser = async () => {
       const token = getToken();
-
       if (!token) {
         router.push("/login");
         return;
@@ -31,8 +44,9 @@ export default function ProfilePage() {
 
       try {
         const profile = await getProfile();
-        setUser(profile?.data?.user || null);
-        setNewName(profile?.data?.user?.name || "");
+        const userData = profile?.data?.user as User | undefined;
+        setUser(userData || null);
+        setNewName(userData?.name || "");
       } catch (err) {
         console.error("Error fetching user:", err);
       } finally {
@@ -43,14 +57,13 @@ export default function ProfilePage() {
     fetchUser();
   }, [router]);
 
-  const handleUpdateName = async () => {
+  const handleUpdateName = async (): Promise<void> => {
     const token = getToken();
-    if (!token) return;
+    if (!token || !user) return;
 
     try {
       const updated = await updateProfile({ name: newName });
-
-      setUser((prev) => ({ ...prev, name: updated.user.name }));
+      setUser((prev) => (prev ? { ...prev, name: updated.user.name } : prev));
       setIsEditing(false);
     } catch (err) {
       console.error("Error updating name:", err);
@@ -59,7 +72,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen ">
+      <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg font-semibold text-purple-700">
           Loading profile...
         </p>
@@ -69,7 +82,7 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center min-h-screen ">
+      <div className="flex items-center justify-center min-h-screen">
         <p className="text-lg font-semibold text-red-600">No user found</p>
       </div>
     );
@@ -107,7 +120,7 @@ export default function ProfilePage() {
         {isEditing ? (
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Button
-              label={"Save"}
+              label="Save"
               onClick={handleUpdateName}
               className="w-full sm:flex-1"
             />
@@ -116,14 +129,14 @@ export default function ProfilePage() {
                 setIsEditing(false);
                 setNewName(user.name);
               }}
-              label={"Cancel"}
+              label="Cancel"
               className="w-full sm:flex-1"
             />
           </div>
         ) : (
           <Button
             onClick={() => setIsEditing(true)}
-            label={"Edit Name"}
+            label="Edit Name"
             className="mt-6 w-full !py-2"
           />
         )}
@@ -143,7 +156,7 @@ export default function ProfilePage() {
             setUserInContext({ isLogin: false });
             router.push("/login");
           }}
-          label={"Logout"}
+          label="Logout"
           className="mt-5 w-full"
         />
       </div>

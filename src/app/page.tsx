@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 
 import InputContainer from "@/components/InputContainer";
 import TodoItem from "@/components/TodoItem";
@@ -12,33 +12,36 @@ import {
   deleteTodo,
   getTodos,
   reOrderTodo,
+  Todo,
   updateTodo,
 } from "@/services/api";
 
-export default function Home() {
-  const [todos, setTodos] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [showCompletedTodo, setShowCompletedTodo] = useState(true);
-  const [todoToDelete, setTodoToDelete] = useState(null);
-  const [draggingId, setDraggingId] = useState(null);
+export default function Home(): JSX.Element {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [showCompletedTodo, setShowCompletedTodo] = useState<boolean>(true);
+  const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
 
+  //  Fetch todos on mount
   useEffect(() => {
     fetchTodos();
   }, []);
 
-  const fetchTodos = async () => {
+  const fetchTodos = async (): Promise<void> => {
     try {
-      const todos = await getTodos();
-      setTodos(todos || []);
+      const todosData = await getTodos();
+      setTodos(todosData || []);
     } catch (err) {
       console.error("Error fetching todos:", err);
     }
   };
 
-  // Add / Edit
-  const handleAdd = async () => {
+  //  Add / Edit Todo
+  const handleAdd = async (): Promise<void> => {
     if (!inputValue.trim()) return;
+
     try {
       if (editingId) {
         await updateTodo(editingId, { title: inputValue });
@@ -53,8 +56,11 @@ export default function Home() {
     }
   };
 
-  // Toggle done
-  const markDone = async (id, currentStatus) => {
+  //  Toggle done
+  const markDone = async (
+    id: string,
+    currentStatus: boolean
+  ): Promise<void> => {
     try {
       await updateTodo(id, { isDone: !currentStatus });
       fetchTodos();
@@ -63,66 +69,64 @@ export default function Home() {
     }
   };
 
-  // Delete
-  const handleDelete = async (id) => setTodoToDelete(id);
+  //  Delete flow
+  const handleDelete = (id: string): void => setTodoToDelete(id);
 
-  const confirmDelete = async () => {
+  const confirmDelete = async (): Promise<void> => {
     if (!todoToDelete) return;
+
     try {
       await deleteTodo(todoToDelete);
       setTodos((prev) => prev.filter((t) => t._id !== todoToDelete));
     } catch (err) {
-      console.error(err);
+      console.error("Error deleting todo:", err);
     } finally {
       setTodoToDelete(null);
     }
   };
-  const cancelDelete = () => setTodoToDelete(null);
 
-  // Edit
-  const handleEdit = async (id) => {
-    try {
-      const item = todos.find((t) => t._id === id);
-      if (!item) return;
-      setInputValue(item.title);
-      setEditingId(id);
-    } catch (err) {
-      console.error("Error editing todo:", err);
-    }
+  const cancelDelete = (): void => setTodoToDelete(null);
+
+  //  Edit Todo
+  const handleEdit = (id: string): void => {
+    const item = todos.find((t) => t._id === id);
+    if (!item) return;
+    setInputValue(item.title);
+    setEditingId(id);
   };
 
-  const handleDrop = (dropId) => {
+  //  Drag and Drop Reordering
+  const handleDrop = (dropId: string): void => {
+    if (!draggingId) return;
+
     const newTodos = [...todos];
+    const draggingIndex = newTodos.findIndex((t) => t._id === draggingId);
+    const dropToIndex = newTodos.findIndex((t) => t._id === dropId);
 
-    const draggingIndex = newTodos.findIndex((todo) => todo._id === draggingId);
-    const dropToIndex = newTodos.findIndex((todo) => todo._id === dropId);
+    if (draggingIndex === -1 || dropToIndex === -1) return;
 
+    // Swap the two todos
     const draggingTodo = newTodos[draggingIndex];
-    const dropToTodo = newTodos[dropToIndex];
-
-    newTodos[draggingIndex] = dropToTodo;
+    newTodos[draggingIndex] = newTodos[dropToIndex];
     newTodos[dropToIndex] = draggingTodo;
+
     const updatedTodoOrder = [
       { _id: draggingId, order: dropToIndex },
       { _id: dropId, order: draggingIndex },
     ];
 
     reOrderTodo(updatedTodoOrder)
-      .then((res) => {
-        console.log("Order Updated", res);
-      })
-      .catch((e) => {
-        console.log("Error in order update", e);
-      });
+      .then(() => console.log("Order updated"))
+      .catch((e) => console.error("Error updating order:", e));
 
     setTodos(newTodos);
   };
 
   return (
     <div>
-      <div className=" max-w-lg mx-auto mt-2 sm:mt-2 p-3 sm:p-6 bg-white shadow-lg rounded-lg border border-purple-200">
-        {/* Input + Add (responsive layout) */}
-        <div className="flex flex-col  gap-2 sm:gap-3">
+      <div className="max-w-lg mx-auto mt-2 sm:mt-2 p-3 sm:p-6 bg-white shadow-lg rounded-lg border border-purple-200">
+        {/* Input + Add */}
+        <div className="flex flex-col gap-2 sm:gap-3">
           <InputContainer
             inputValue={inputValue}
             setInputValue={setInputValue}
@@ -137,11 +141,11 @@ export default function Home() {
             .reverse()
             .map((v) => (
               <TodoItem
-                key={v._id || v.id}
+                key={v._id}
                 v={v}
                 markDone={() => markDone(v._id, v.isDone)}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
+                handleDelete={() => handleDelete(v._id)}
+                handleEdit={() => handleEdit(v._id)}
                 setDraggingId={setDraggingId}
                 handleDropDrag={handleDrop}
                 responsive
@@ -164,6 +168,7 @@ export default function Home() {
                 showCompletedTodo={showCompletedTodo}
               />
             </div>
+
             {showCompletedTodo && (
               <div className="mt-2 space-y-3">
                 {todos
@@ -174,8 +179,14 @@ export default function Home() {
                       v={todo}
                       markDone={() => markDone(todo._id, todo.isDone)}
                       handleDelete={() => handleDelete(todo._id)}
-                      handleEdit={() => handleEdit(todo._id, todo.title)}
+                      handleEdit={() => handleEdit(todo._id)}
                       responsive
+                      setDraggingId={function (id: string): void {
+                        throw new Error("Function not implemented.");
+                      }}
+                      handleDropDrag={function (id: string): void {
+                        throw new Error("Function not implemented.");
+                      }}
                     />
                   ))}
               </div>
