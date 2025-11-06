@@ -1,8 +1,13 @@
 "use client";
 
 import { PencilIcon } from "@heroicons/react/24/outline";
+import React from "react";
 
-export default function EditButton({ onClick }) {
+interface EditButtonProps {
+  onClick: () => void;
+}
+
+const EditButton: React.FC<EditButtonProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -13,4 +18,6 @@ export default function EditButton({ onClick }) {
       <PencilIcon className="h-4 w-4 sm:h-5 sm:w-5" />
     </button>
   );
-}
+};
+
+export default EditButton;

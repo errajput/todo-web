@@ -1,20 +1,32 @@
 "use client";
 
-import { UserContext } from "@/providers";
+import { useState, useContext, useEffect } from "react";
 import Link from "next/link";
-import { useState, useEffect, useContext } from "react";
+import { UserContext } from "@/providers";
+import Image from "next/image";
 
-export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { isLogin } = useContext(UserContext);
+// Define the type of context you expect
+interface UserContextType {
+  isLogin: boolean;
+}
 
-  if (!isLogin) return;
+const Header: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const { isLogin } = useContext(UserContext) as UserContextType;
+
+  if (!isLogin) return null; // ✅ Fix: must return JSX or null
 
   return (
-    <header className="bg-gradient-to-tr from-purple-200 via-pink-200 to-yellow-200  text-purple-800 shadow-md p-2 flex justify-between items-center sticky top-0 z-50">
+    <header className="bg-gradient-to-tr from-purple-200 via-pink-200 to-yellow-200 text-purple-800 shadow-md p-2 flex justify-between items-center sticky top-0 z-50">
       {/* Logo + Title */}
       <div className="flex items-center space-x-3">
-        <img src="/iconTodo.png" alt="Todo APP" className="w-12 h-12" />{" "}
+        <Image
+          src="/iconTodo.png"
+          alt="Todo APP"
+          width="44"
+          height="44"
+          className="w-12 h-12"
+        />
         <Link href="/">
           <h1
             className="text-2xl font-bold tracking-wide 
@@ -29,7 +41,7 @@ export default function Header() {
       </div>
 
       {/* Desktop Nav */}
-      <nav className="">
+      <nav>
         {isLogin ? (
           <Link
             href="/profile"
@@ -62,4 +74,6 @@ export default function Header() {
       </nav>
     </header>
   );
-}
+};
+
+export default Header;

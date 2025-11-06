@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import PasswordField from "@/ui/PasswordField";
 import Button from "@/ui/Button";
@@ -8,22 +8,29 @@ import TextField from "@/ui/TextField";
 import EmailField from "@/ui/EmailField";
 import Link from "next/link";
 import { registerUser } from "@/services/api";
+import Image from "next/image";
 
-export default function RegisterPage() {
-  const [formData, setFormData] = useState({
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
+const RegisterPage: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     password: "",
   });
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string>("");
   const router = useRouter();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -38,16 +45,17 @@ export default function RegisterPage() {
   return (
     <div className="flex flex-col items-center justify-center px-4 py-8">
       <div className="flex items-center justify-center gap-3 mb-6">
-        <img
+        <Image
           src="/iconTodo.png"
           alt="Todo APP"
-          className="w-12 h-12 mx-auto "
+          className="w-12 h-12 mx-auto"
         />
         <h2 className="text-purple-600 text-2xl sm:text-4xl font-extrabold mt-3">
           Todo Web
         </h2>
       </div>
-      <div className="flex flex-col md:flex-row w-full max-w-3xl shadow-2xl rounded-2xl overflow-hidden ">
+
+      <div className="flex flex-col md:flex-row w-full max-w-3xl shadow-2xl rounded-2xl overflow-hidden">
         {/* Left White Section */}
         <div className="w-full md:w-1/2 bg-white p-6 flex flex-col justify-center">
           <h2 className="text-xl md:text-2xl font-bold text-purple-700 mb-6 text-center">
@@ -57,24 +65,25 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <TextField
               label="Name"
-              name="name"
               value={formData.name}
               onChange={handleChange}
+              placeholder="Enter your name"
+              className=""
             />
 
             <EmailField
-              name="email"
               value={formData.email}
               onChange={handleChange}
+              className=""
             />
 
             <PasswordField
-              name="password"
               value={formData.password}
               onChange={handleChange}
+              className=""
             />
 
-            <Button label="Register" />
+            <Button label="Register" onClick={() => {}} />
           </form>
 
           {message && (
@@ -89,7 +98,7 @@ export default function RegisterPage() {
             </p>
           )}
 
-          <p className=" mt-6 text-center text-gray-700 text-sm block md:hidden">
+          <p className="mt-6 text-center text-gray-700 text-sm block md:hidden">
             Already have an account?{" "}
             <Link
               href="/login"
@@ -119,4 +128,6 @@ export default function RegisterPage() {
       </div>
     </div>
   );
-}
+};
+
+export default RegisterPage;

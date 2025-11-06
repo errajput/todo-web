@@ -2,13 +2,52 @@
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
-// Token helpers
-export const getToken = () => localStorage.getItem("token");
-export const setToken = (token) => localStorage.setItem("token", token);
-export const removeToken = () => localStorage.removeItem("token");
-export const isUserLogin = () => !!getToken();
+export interface LoginForm {
+  email: string;
+  password: string;
+}
 
-export const getTokenHeader = () => {
+export interface RegisterForm {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface UserProfile {
+  [x: string]: any;
+  id: string;
+  name: string;
+  email: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Todo {
+  _id: string;
+  title: string;
+  isDone: boolean;
+  order?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ReorderPayload {
+  sourceIndex: number;
+  destinationIndex: number;
+}
+
+export interface TodoOrder {
+  _id: string;
+  order: number;
+}
+// Token helpers
+export const getToken = (): string | null => localStorage.getItem("token");
+export const setToken = (token: string): void =>
+  localStorage.setItem("token", token);
+export const removeToken = (): void => localStorage.removeItem("token");
+export const isUserLogin = (): boolean => !!getToken();
+
+export const getTokenHeader = (): Record<string, string> => {
   const token = getToken();
   if (!token) throw new Error("No token found");
   return {
@@ -17,12 +56,16 @@ export const getTokenHeader = () => {
   };
 };
 
-// ======================
 // AUTH / USER APIs
-// ======================
 
 // Login
-export const loginUser = async (formData) => {
+export const loginUser = async (
+  formData: LoginForm
+): Promise<{
+  [x: string]: any;
+  token: string;
+  user: UserProfile;
+}> => {
   const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -35,7 +78,9 @@ export const loginUser = async (formData) => {
 };
 
 // Register
-export const registerUser = async (formData) => {
+export const registerUser = async (
+  formData: RegisterForm
+): Promise<UserProfile> => {
   const res = await fetch(`${API_URL}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -47,7 +92,7 @@ export const registerUser = async (formData) => {
 };
 
 // Get profile
-export const getProfile = async () => {
+export const getProfile = async (): Promise<UserProfile> => {
   const res = await fetch(`${API_URL}/user/profile`, {
     method: "GET",
     headers: getTokenHeader(),
@@ -58,7 +103,9 @@ export const getProfile = async () => {
 };
 
 // Update profile
-export const updateProfile = async (updateData) => {
+export const updateProfile = async (
+  updateData: Partial<UserProfile>
+): Promise<UserProfile> => {
   const res = await fetch(`${API_URL}/user/profile`, {
     method: "PATCH",
     headers: {
@@ -73,16 +120,14 @@ export const updateProfile = async (updateData) => {
 };
 
 // Logout
-export const logoutUser = () => {
+export const logoutUser = (): void => {
   removeToken();
 };
 
-// ======================
 // TODOS APIs
-// ======================
 
 // Get all todos
-export const getTodos = async () => {
+export const getTodos = async (): Promise<Todo[]> => {
   try {
     const res = await fetch(`${API_URL}/todos`, {
       headers: getTokenHeader(),
@@ -90,14 +135,15 @@ export const getTodos = async () => {
     if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
     const data = await res.json();
 
-    return data.data;
+    return data.data as Todo[];
   } catch (error) {
     window.location.href = "/login";
+    throw error;
   }
 };
 
 // Add new todo
-export const addTodo = async (title) => {
+export const addTodo = async (title: string): Promise<Todo> => {
   const res = await fetch(`${API_URL}/todos`, {
     method: "POST",
     headers: getTokenHeader(),
@@ -109,7 +155,10 @@ export const addTodo = async (title) => {
 };
 
 // Update todo
-export const updateTodo = async (id, updatedFields) => {
+export const updateTodo = async (
+  id: string,
+  updatedFields: Partial<Todo>
+): Promise<Todo> => {
   const res = await fetch(`${API_URL}/todos/${id}`, {
     method: "PATCH",
     headers: getTokenHeader(),
@@ -121,7 +170,7 @@ export const updateTodo = async (id, updatedFields) => {
 };
 
 // Delete todo
-export const deleteTodo = async (id) => {
+export const deleteTodo = async (id: string): Promise<{ success: boolean }> => {
   const res = await fetch(`${API_URL}/todos/${id}`, {
     method: "DELETE",
     headers: getTokenHeader(),
@@ -132,13 +181,14 @@ export const deleteTodo = async (id) => {
 };
 
 // Delete todo
-export const reOrderTodo = async (payload) => {
+export const reOrderTodo = async (payload: TodoOrder[]): Promise<Todo[]> => {
   const res = await fetch(`${API_URL}/todos/reorder`, {
     method: "PUT",
     headers: getTokenHeader(),
     body: JSON.stringify(payload),
   });
+
   const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Failed to reorder todo");
+  if (!res.ok) throw new Error(data.message || "Failed to reorder todos");
   return data;
 };
