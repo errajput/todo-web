@@ -3,10 +3,16 @@ import { cn } from "@/utils/function";
 interface ButtonProps {
   label: string;
   onClick?: () => void;
+  disabled?: boolean;
   className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ label, onClick, className }) => {
+const Button: React.FC<ButtonProps> = ({
+  label,
+  onClick,
+  disabled = false,
+  className,
+}) => {
   const hasCustomBg = className?.split(" ").some((c) => c.startsWith("bg-"));
 
   return (
@@ -20,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, className }) => {
         className
       )}
       onClick={onClick}
+      disabled={disabled}
     >
       {label}
     </button>

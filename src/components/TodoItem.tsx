@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import CustomCheckBox from "./CustomCheckBox";
 import DeleteButton from "./DeleteButton";
 import EditButton from "./EditButton";
@@ -33,6 +33,19 @@ const TodoItem: React.FC<TodoItemProps> = ({
   handleDropDrag,
   responsive = false,
 }) => {
+  const [loadingCheck, setLoadingCheck] = useState(false);
+
+  const handleCheckboxClick = async () => {
+    try {
+      setLoadingCheck(true);
+      await markDone(v._id);
+    } catch (err) {
+      console.error("Error toggling todo:", err);
+    } finally {
+      setLoadingCheck(false);
+    }
+  };
+
   return (
     <div className={`${responsive ? "flex-col sm:flex-row" : "flex-row"}`}>
       <div
@@ -45,7 +58,11 @@ const TodoItem: React.FC<TodoItemProps> = ({
       >
         <div className="flex items-center gap-2 sm:gap-4">
           <Squares2X2Icon className="h-2 w-2 sm:h-3 sm:w-3 text-purple-700 cursor-move" />
-          <CustomCheckBox checked={v.isDone} onChange={() => markDone(v._id)} />
+          {loadingCheck ? (
+            <div className="w-5 h-5 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            <CustomCheckBox checked={v.isDone} onChange={handleCheckboxClick} />
+          )}
           <p
             className={`flex-1 text-left sm:text-base text-sm break-words ${
               v.isDone ? "line-through text-purple-300" : ""

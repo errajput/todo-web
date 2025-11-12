@@ -23,6 +23,7 @@ export default function Home(): JSX.Element {
   const [showCompletedTodo, setShowCompletedTodo] = useState<boolean>(true);
   const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   //  Fetch todos on mount
   useEffect(() => {
@@ -30,11 +31,14 @@ export default function Home(): JSX.Element {
   }, []);
 
   const fetchTodos = async (): Promise<void> => {
+    setLoading(true);
     try {
       const todosData = await getTodos();
       setTodos(todosData || []);
     } catch (err) {
       console.error("Error fetching todos:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -132,6 +136,13 @@ export default function Home(): JSX.Element {
             setInputValue={setInputValue}
             handleAdd={handleAdd}
           />
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <>{/* Todos list here */}</>
+          )}
         </div>
 
         {/* Active Todos */}

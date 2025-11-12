@@ -24,6 +24,8 @@ const RegisterPage: React.FC = () => {
   });
 
   const [message, setMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,13 +34,19 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
     try {
       await registerUser(formData);
       setMessage("Registration successful ✅");
-      router.push("/login");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
     } catch (err) {
       setMessage("Something went wrong 🚨");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,6 +56,8 @@ const RegisterPage: React.FC = () => {
         <Image
           src="/iconTodo.png"
           alt="Todo APP"
+          width={62}
+          height={62}
           className="w-12 h-12 mx-auto"
         />
         <h2 className="text-purple-600 text-2xl sm:text-4xl font-extrabold mt-3">
@@ -83,7 +93,12 @@ const RegisterPage: React.FC = () => {
               className=""
             />
 
-            <Button label="Register" onClick={() => {}} />
+            <Button label="Register" onClick={() => {}} disabled={loading} />
+            {loading && (
+              <div className="flex justify-center mt-3">
+                <div className="w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
           </form>
 
           {message && (

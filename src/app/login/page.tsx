@@ -22,6 +22,7 @@ export default function LoginPage() {
     password: "",
   });
   const [message, setMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const { setUser } = useContext(UserContext);
 
@@ -32,6 +33,8 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setMessage("");
 
     if (!formData.email || !formData.password) {
       setMessage("Please fill all fields.");
@@ -60,6 +63,8 @@ export default function LoginPage() {
         <Image
           src="/iconTodo.png"
           alt="Todo APP"
+          width={62}
+          height={62}
           className="w-12 h-12 mx-auto"
         />
         <h2 className="text-purple-600 text-2xl sm:text-4xl font-extrabold mt-3">
@@ -96,7 +101,16 @@ export default function LoginPage() {
             <PasswordField value={formData.password} onChange={handleChange} />
 
             <div className="text-center">
-              <Button label="LOGIN" className="w-full sm:w-auto" />
+              <Button
+                label="LOGIN"
+                className="w-full sm:w-auto"
+                disabled={loading}
+              />
+              {loading && (
+                <div className="flex justify-center mt-3">
+                  <div className="w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
             </div>
           </form>
 
